@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Expense</title>
+</head>
+<body>
+<form id="myform">
+    Expense:<input type="text" id="txtexp"><br><br>
+    Involve Person:
+    <input type="checkbox" class="chki" id="ia" value="a">A
+    <input type="checkbox" class="chki" id="ib" value="b">B
+    <input type="checkbox" class="chki" id="ic" value="c">C
+    <input type="checkbox" class="chki" id="id" value="d">D
+    <input type="checkbox" class="chki" id="ie" value="e">E <br><br>
+Payer Person: <br>
+    <input type="checkbox" id="pa" class="chkp" value="a">A <input type="text" class="rup" id="txta"><br>
+    <input type="checkbox" id="pb" class="chkp" value="b">B <input type="text" class="rup" id="txtb"><br>
+    <input type="checkbox" id="pc" class="chkp" value="c">C <input type="text" class="rup" id="txtc"><br>
+    <input type="checkbox" id="pd" class="chkp" value="d">D <input type="text" class="rup" id="txtd"><br>
+    <input type="checkbox" id="pe" class="chkp" value="e">E <input type="text" class="rup" id="txte"><br><br>
+    <input type="button" id="btn" class="chkp" value="Submit" onclick="submit1()">
+<script>
+
+    var store=[];
+    var person=['a','b','c','d','e'];
+
+    function submit1()
+    {
+        var expense='';
+        var involve=[];
+        var payer=[];
+        var payrp=[];
+        var perhead=[];
+        var sum=0;
+
+        expense=document.getElementById('txtexp').value;
+        var chki=document.querySelectorAll('.chki');
+
+
+        chki.forEach(function (e) {
+          if(e.checked)
+          {
+              involve.push(e.value);
+          }
+        });
+
+        var chkp=document.querySelectorAll('.chkp');
+        chkp.forEach(function (e)
+        {
+            if(e.checked)
+            {
+                payer.push(e.value);
+            }
+        });
+
+        var rup=document.querySelectorAll('.rup');
+        rup.forEach(function (e)
+        {
+            var rupee=Number(e.value);
+            if(rupee)
+            {
+                payrp.push(rupee)
+                sum= sum + Number(e.value);
+            }
+        });
+        var pertotal=sum/involve.length;
+
+        var obj={expense,involve,payer,payrp,pertotal};
+        store.push(obj);
+        involve=[];
+        payrp=[];
+        payer=[];
+        pertotal=0;
+        sum=0;
+        expense='';
+        console.log(store);
+        calctotalExp();
+        setBlank();
+    }
+    function setBlank() {
+
+
+        var chki=document.querySelectorAll('.chki');
+
+        chki.forEach(function (e) {
+            if(e.checked)
+            {
+                e.checked=false;
+            }
+        });
+
+        var chkp=document.querySelectorAll('.chkp');
+        chkp.forEach(function (e)
+        {
+            if(e.checked)
+            {
+                e.checked=false;
+            }
+        });
+
+        var rup=document.querySelectorAll('.rup');
+        rup.forEach(function (e)
+        {
+            e.value='';
+        });
+    }
+    function calctotalExp()
+    {
+        var totalpayed=[0,0,0,0,0];
+        var totalused=[0,0,0,0,0];
+        var totalback=[0,0,0,0,0];
+
+        store.forEach(function (e)
+        {
+            e.payer.forEach(function (e1)
+            {
+                totalpayed[person.indexOf(e1)] += e.payrp[e.payer.indexOf(e1)];
+            })
+            console.log(totalpayed);
+        });
+
+        store.forEach(function (s) {
+            s.involve.forEach(function (s1) {
+                totalused[person.indexOf(s1)] +=s.pertotal;
+            })
+            console.log(totalused);
+        });
+
+        for(var i=0;i<totalpayed.length;i++)
+        {
+            totalback[i]=totalpayed[i]-totalused[i];
+        }
+        console.log(totalback);
+        var temp=[0,0,0,0,0];
+        totalback.forEach(function (e) {
+                console.log(e);
+                if(e>0) {
+                    totalback.forEach(function (el) {
+                    if(el<0){
+                        if(e>= Math.abs(el))
+                        {
+                            temp[person.indexOf(e)]=e-Math.abs(el);
+                        }
+                        else
+                        {
+                            temp[person.indexOf(e)]=el-Math.abs(e);
+                        }
+                    }
+                    else
+                    {
+
+                    }
+
+                    })
+                }
+                else
+                {
+                    temp[person.indexOf(e)]=
+                }
+
+        });
+
+    }
+</script>
+</form>
+</body>
+</html>
