@@ -20,10 +20,17 @@ Payer Person: <br>
     <input type="checkbox" id="pd" class="chkp" value="d">D <input type="text" class="rup" id="txtd"><br>
     <input type="checkbox" id="pe" class="chkp" value="e">E <input type="text" class="rup" id="txte"><br><br>
     <input type="button" id="btn" class="chkp" value="Submit" onclick="submit1()">
+<input type="button" id="btnp" class="chkp" value="Page" onclick="page()">
+    <div id="output"></div>
 <script>
 
     var store=[];
     var person=['a','b','c','d','e'];
+    var totalpayed=[0,0,0,0,0];
+    var totalused=[0,0,0,0,0];
+    var totalback=[0,0,0,0,0];
+var satle = [[],[],[],[],[]];
+console.log(satle);
 
     function submit1()
     {
@@ -33,18 +40,14 @@ Payer Person: <br>
         var payrp=[];
         var perhead=[];
         var sum=0;
-
         expense=document.getElementById('txtexp').value;
         var chki=document.querySelectorAll('.chki');
-
-
         chki.forEach(function (e) {
           if(e.checked)
           {
               involve.push(e.value);
           }
         });
-
         var chkp=document.querySelectorAll('.chkp');
         chkp.forEach(function (e)
         {
@@ -53,7 +56,6 @@ Payer Person: <br>
                 payer.push(e.value);
             }
         });
-
         var rup=document.querySelectorAll('.rup');
         rup.forEach(function (e)
         {
@@ -65,7 +67,6 @@ Payer Person: <br>
             }
         });
         var pertotal=sum/involve.length;
-
         var obj={expense,involve,payer,payrp,pertotal};
         store.push(obj);
         involve=[];
@@ -77,19 +78,28 @@ Payer Person: <br>
         console.log(store);
         calctotalExp();
         setBlank();
+        display();
     }
+    function display() {
+    console.log('person',person);
+    console.log('totalPayed',totalpayed);
+    console.log('totalUsed',totalused);
+    console.log('totalBack',totalback);
+    console.log('----------------------------------------------------');
+    console.log('satle : ',satle);
+  //  console.log(satle[0][0]);
+
+}
+
     function setBlank() {
-
-
+        document.getElementById('txtexp').value="";
         var chki=document.querySelectorAll('.chki');
-
         chki.forEach(function (e) {
             if(e.checked)
             {
                 e.checked=false;
             }
         });
-
         var chkp=document.querySelectorAll('.chkp');
         chkp.forEach(function (e)
         {
@@ -98,7 +108,6 @@ Payer Person: <br>
                 e.checked=false;
             }
         });
-
         var rup=document.querySelectorAll('.rup');
         rup.forEach(function (e)
         {
@@ -107,10 +116,7 @@ Payer Person: <br>
     }
     function calctotalExp()
     {
-        var totalpayed=[0,0,0,0,0];
-        var totalused=[0,0,0,0,0];
-        var totalback=[0,0,0,0,0];
-
+        
         store.forEach(function (e)
         {
             e.payer.forEach(function (e1)
@@ -119,49 +125,100 @@ Payer Person: <br>
             })
             console.log(totalpayed);
         });
-
         store.forEach(function (s) {
             s.involve.forEach(function (s1) {
                 totalused[person.indexOf(s1)] +=s.pertotal;
             })
             console.log(totalused);
         });
-
         for(var i=0;i<totalpayed.length;i++)
         {
             totalback[i]=totalpayed[i]-totalused[i];
         }
-        console.log(totalback);
-        var temp=[0,0,0,0,0];
+
+
+       // console.log(totalback);
+       ans();
+  
+    }
+function ans()
+{
+     var temp;
+        var index=0;
+        var nval;
         totalback.forEach(function (e) {
+            temp=[0,0,0,0,0]
                 console.log(e);
                 if(e>0) {
-                    totalback.forEach(function (el) {
-                    if(el<0){
-                        if(e>= Math.abs(el))
+                    nval=0;
+                    var index1=0;
+                    totalback.forEach(function (e1) {
+                    if(e1<0){
+                        if(e>= Math.abs(e1))
                         {
-                            temp[person.indexOf(e)]=e-Math.abs(el);
+                            nval=e-Math.abs(e1);
+                            temp[index1]=Math.abs(e1);
+                            index1++;
+                            totalback[totalback.indexOf(e)]=nval;
+                            totalback[totalback.indexOf(e1)]=0;
+                            e=nval;
                         }
                         else
                         {
-                            temp[person.indexOf(e)]=el-Math.abs(e);
+                            nval=Math.abs(e1)-e;
+                            temp[index1]=Math.abs(e1)-e;
+                            index1++;
+                            totalback[totalback.indexOf(e)]=0;
+                            totalback[totalback.indexOf(e1)]=nval;
+                            e=0;
                         }
                     }
                     else
                     {
-
+                        temp[index1]=0;
+                        index++;
                     }
-
-                    })
+                    });
                 }
                 else
                 {
-                    temp[person.indexOf(e)]=
-                }
+                    temp=[0,0,0,0,0];
 
+                }
+            satle[index]=temp;
+           console.log("temp"+temp)
+            index++;
         });
+ //       page(); 
+}
+function page() {
+    var out1 = document.getElementById('output');
+    var html = '<table border="1"><tr>';
+
+    for(let i=0;i<=person.length;i++){
+        if(i==0){
+            html+="<td></td>";
+        }else {
+            html+="<th>"+person[i-1]+"</th>";
+        }
 
     }
+    html+="</tr>";
+
+    for (let i=0;i<person.length;i++){
+        html+="<tr><th>"+person[i]+"</th>";
+        for(let j=0;j<person.length;j++){
+            if(i<person.length){
+                html+="<td>"+satle[i][j]+"</td>";
+            }
+        }
+        html+="</tr>";
+    }
+
+
+    html+="</table>";
+    out1.innerHTML += html;
+}
 </script>
 </form>
 </body>
