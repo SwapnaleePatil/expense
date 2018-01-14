@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Task</title>
+	<style>
+	#rand{
+		border: 2px solid black;
+		display: box;
+		height: 300px;
+		width: 300px;
+		font-size: 200px;
+		font-stretch: condensed;
+	}	
+
+	#btnp{
+		border: 2px solid black;
+		display: box;
+		height: 300px;
+		width: 300px;
+	}
+	#btne{
+		border: 2px solid black;
+		display: box;
+		height: 50px;
+		width: 610px;
+	}
+	#avvv{
+		border: 2px solid black;
+		display: box;
+		height: 50px;
+		width: 610px;
+	}
+</style>
+</head>
+<body>
+	<div id="output"></div>
+	<center>
+	<table><tr><td><div id="rand"></div></td>
+				<td><div id="btnp" class="print"></div></td></tr>
+			<tr><td colspan="2"><div id="btne" class="enter"></div></td>
+				</tr>
+				<tr><td colspan="2"><div id="avv" class="avvv"><input type="button" name="btnsolve" onclick="solve()" value="Solve"><input type="button" name="btnRefresh" onclick="refresh()" value="Refresh" ></div></td></tr></table>
+
+</center>
+<script>
+		window.onload=make();
+		var count=0;
+		var html="";
+		var btn=document.getElementById("btne") ;
+		
+		var a=Math.floor((Math.random()*9)+1);
+
+		document.getElementById("rand").innerHTML=a;
+		function make()
+		{
+			 btn=document.getElementById("btne") ;
+			for(var i=1;i<=10;i++)
+			{
+				html+="<input type='button' value='"+i+"' onclick='myFun(this)' class='eclass'>";
+			}
+		
+			btn.innerHTML=html;
+		}
+		
+		var html1="";
+
+		var btn2=document.getElementById("btnp");
+		var cl=document.querySelectorAll('.eclass');
+		var html1="";
+	
+		function myFun(t)
+		{
+			
+			html1="<input type='button' onclick='myFun1(this)' class='ap' value='"+t.value+"'>";
+			
+				btn2.innerHTML+=html1;
+			
+			t.hidden="true"
+		}
+		var m="";
+		function myFun1(th)
+		{
+			
+			m="<input type='button' onclick='myFun(this)' value='"+th.value+"' class='eclass'>";
+			
+			btn.innerHTML+=m;
+	
+			th.hidden="true"
+
+		}
+		function refresh()
+		{	
+			if(count<5)
+			{
+				a=Math.floor((Math.random()*9)+1);
+				document.getElementById("rand").innerHTML=a;
+				count++;
+				document.getElementById("btnp").innerHTML="";
+				document.getElementById("btne").innerHTML="";
+				
+			}
+			else
+			{
+				
+				document.getElementById("output").innerHTML="You Loss The Game";
+				document.getElementById("btnp").innerHTML="";
+				document.getElementById("btne").innerHTML="";
+			}
+			make();
+		}
+		
+		function solve()
+		{
+			var num=0;
+			var ml=0;
+			var sv=document.querySelectorAll('.ap');
+			console.log(sv)
+			sv.forEach(function(e){
+				
+				var m=Number(e.value);
+				num=num+m;
+			})
+			if(a==num)
+			{
+				document.getElementById("output").innerHTML="You Win";
+				document.getElementById("btnp").innerHTML="";
+			}
+			else
+			{
+				document.getElementById("output").innerHTML="You Loss";
+				document.getElementById("btnp").innerHTML="";
+			}
+			console.log("a"+a);
+			console.log("num"+num);
+
+					make();	
+		}
+		
+</script>
+
+</body>
+</html>
